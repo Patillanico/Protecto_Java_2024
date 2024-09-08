@@ -1,0 +1,287 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Alumnos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            text-align: center;
+            padding: 15px;
+            font-size: 24px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .volver {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .volver button {
+            font-size: 24px;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .volver button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para las ventanas modales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+        }
+
+        .modal-header {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .modal-footer button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .modal-footer button:hover {
+            background-color: #ddd;
+        }
+
+        .input-box {
+            margin-bottom: 15px;
+        }
+
+        .input-box input {
+            font-size: 18px;
+            padding: 5px;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Listado de Alumnos</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Modificacion</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-datos">
+            
+        </tbody>
+    </table>
+
+    <div class="volver">
+        <button onclick="window.location.href='nuevo8.html'">Volver</button>
+    </div>
+
+    
+    <div id="modal-eliminar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                ¿Estás seguro de eliminar este nombre y apellido de la lista?
+            </div>
+            <div class="modal-footer">
+                <button id="btn-no-eliminar" onclick="cerrarModal('modal-eliminar')">No</button>
+                <button id="btn-si-eliminar">Sí</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="modal-detalles" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Detalles</div>
+            <div id="detalle-datos"></div>
+            <div class="modal-footer">
+                <button onclick="cerrarModal('modal-detalles')">Volver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Editar Datos</div>
+            <div class="input-box">
+                Nombre: <input type="text" id="editar-nombre">
+            </div>
+            <div class="input-box">
+                Apellido: <input type="text" id="editar-apellido">
+            </div>
+            <div class="input-box">
+                Edad: <input type="number" id="editar-edad">
+            </div>
+            <div class="input-box">
+                Curso: <input type="text" id="editar-curso">
+            </div>
+            <div class="input-box">
+                Fecha de Nacimiento: <input type="date" id="editar-fecha-nacimiento">
+            </div>
+            <div class="modal-footer">
+                <button onclick="guardarCambios()">Guardar</button>
+                <button onclick="cerrarModal('modal-editar')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            cargarAlumnos();
+        };
+
+        let filaSeleccionada;
+
+        function cargarAlumnos() {
+            const alumnos = JSON.parse(localStorage.getItem('alumnos')) || [];
+            const tablaDatos = document.getElementById('tabla-datos');
+            tablaDatos.innerHTML = '';
+
+            alumnos.forEach(alumno => {
+                const fila = document.createElement('tr');
+                fila.setAttribute('data-nombre', alumno.nombre);
+                fila.setAttribute('data-apellido', alumno.apellido);
+                fila.setAttribute('data-edad', alumno.edad);
+                fila.setAttribute('data-curso', alumno.curso);
+                fila.setAttribute('data-fecha-nacimiento', alumno.fechaNacimiento);
+                fila.innerHTML = `
+                    <td>${alumno.nombre}</td>
+                    <td>${alumno.apellido}</td>
+                    <td class="action-buttons">
+                        <img src="https://via.placeholder.com/30?text=🗑️" alt="Borrar" onclick="ConfirmarsuEliminacion(this)">
+                        <img src="https://via.placeholder.com/30?text=🔍" alt="Ver" onclick="DetallesdelAlumno(this)">
+                        <img src="https://via.placeholder.com/30?text=✏️" alt="Editar" onclick="EdiciondeDatos(this)">
+                    </td>
+                `;
+                tablaDatos.appendChild(fila);
+            });
+        }
+
+        function ConfirmarsuEliminacion(elemento) {
+            filaSeleccionada = elemento.closest('tr');
+            document.getElementById('modal-eliminar').style.display = 'flex';
+        }
+
+        document.getElementById('btn-si-eliminar').onclick = function() {
+            const alumnos = JSON.parse(localStorage.getItem('alumnos')) || [];
+            const nombre = filaSeleccionada.getAttribute('data-nombre');
+            const apellido = filaSeleccionada.getAttribute('data-apellido');
+
+            const nuevosAlumnos = alumnos.filter(alumno => alumno.nombre !== nombre || alumno.apellido !== apellido);
+            localStorage.setItem('alumnos', JSON.stringify(nuevosAlumnos));
+            cargarAlumnos();
+            cerrarModal('modal-eliminar');
+        }
+
+        function DetallesdelAlumno(elemento) {
+            const fila = elemento.closest('tr');
+            const nombre = fila.getAttribute('data-nombre');
+            const apellido = fila.getAttribute('data-apellido');
+            const edad = fila.getAttribute('data-edad');
+            const curso = fila.getAttribute('data-curso');
+            const fechaNacimiento = fila.getAttribute('data-fecha-nacimiento');
+
+            document.getElementById('detalle-datos').innerHTML = `
+                <p><strong>Nombre:</strong> ${nombre}</p>
+                <p><strong>Apellido:</strong> ${apellido}</p>
+                <p><strong>Edad:</strong> ${edad}</p>
+                <p><strong>Curso:</strong> ${curso}</p>
+                <p><strong>Fecha de Nacimiento:</strong> ${fechaNacimiento}</p>
+            `;
+            document.getElementById('modal-detalles').style.display = 'flex';
+        }
+
+        function EdiciondeDatos(elemento) {
+            filaSeleccionada = elemento.closest('tr');
+
+            document.getElementById('editar-nombre').value = filaSeleccionada.getAttribute('data-nombre');
+            document.getElementById('editar-apellido').value = filaSeleccionada.getAttribute('data-apellido');
+            document.getElementById('editar-edad').value = filaSeleccionada.getAttribute('data-edad');
+            document.getElementById('editar-curso').value = filaSeleccionada.getAttribute('data-curso');
+            document.getElementById('editar-fecha-nacimiento').value = filaSeleccionada.getAttribute('data-fecha-nacimiento');
+
+            document.getElementById('modal-editar').style.display = 'flex';
+        }
+
+        function guardarCambios() {
+            const nombre = document.getElementById('editar-nombre').value;
+            const apellido = document.getElementById('editar-apellido').value;
+            const edad = document.getElementById('editar-edad').value;
+            const curso = document.getElementById('editar-curso').value;
+            const fechaNacimiento = document.getElementById('editar-fecha-nacimiento').value;
+
+            const alumnos = JSON.parse(localStorage.getItem('alumnos')) || [];
+
+            const index = alumnos.findIndex(alumno =>
+                alumno.nombre === filaSeleccionada.getAttribute('data-nombre') &&
+                alumno.apellido === filaSeleccionada.getAttribute('data-apellido')
+            );
+
+            if (index !== -1) {
+                alumnos[index] = { nombre, apellido, edad, curso, fechaNacimiento };
+                localStorage.setItem('alumnos', JSON.stringify(alumnos));
+                cargarAlumnos();
+            }
+
+            cerrarModal('modal-editar');
+        }
+
+        function cerrarModal(idModal) {
+            document.getElementById(idModal).style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
