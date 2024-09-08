@@ -1,0 +1,149 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+        }
+
+        h1 {
+            font-size: 40px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            margin-left: 20px;
+            vertical-align: middle;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label, select, input, button {
+            font-size: 24px;
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        select {
+            width: 300px;
+            padding: 10px;
+        }
+
+        button {
+            font-size: 24px;
+            padding: 10px 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Buscar</h1>
+    <img id="imagen-apellido" src="https://via.placeholder.com/100" alt="Imagen de ejemplo">
+
+    <form>
+        <label for="apellido">Apellido:</label>
+        <select id="apellido" name="apellido" onchange="cambiarImagen()">
+            <option value="Alegre">Alegre</option>
+            <option value="Barreto">Barreto</option>
+            <option value="Biasone">Biasone</option>
+            <option value="Caballero">Caballero</option>
+            <option value="Carrasco">Carrasco</option>
+            <option value="Copa">Copa</option>
+			<option value="Costandopulo">Costandopulo</option>
+            <option value="Di Maggio Doormann">Di Maggio Doormann</option>
+            <option value="Di Placido">Di Placido</option>
+            <option value="Diez">Diez</option>
+            <option value="Espindola">Espindola</option>
+          
+        </select>
+        
+        <br><br>
+        
+        <button type="button" onclick="agregar()">Agregar</button>
+        <button type="button" onclick="buscar()">Buscar</button>
+    </form>
+
+    <script>
+        function agregar() {
+            
+            window.location.href = 'nuevo12.html';
+        }
+
+        function buscar() {
+            
+            window.location.href = 'nuevo9.html';
+        }
+
+        function cambiarImagen() {
+            const imagen = document.getElementById("imagen-apellido");
+            const apellido = document.getElementById("apellido").value;
+
+            switch (apellido) {
+                case "Alegre":
+                    imagen.src = "https://via.placeholder.com/100?text=Alegre";
+                    break;
+                case "Barreto":
+                    imagen.src = "https://via.placeholder.com/100?text=Barreto";
+                    break;
+                case "Biasone":
+                    imagen.src = "https://via.placeholder.com/100?text=Biasone";
+                    break;
+                case "Caballero":
+                    imagen.src = "https://via.placeholder.com/100?text=Caballero";
+                    break;
+                case "Carrasco":
+                    imagen.src = "https://via.placeholder.com/100?text=Carrasco";
+                    break;
+                case "Copa":
+                    imagen.src = "https://via.placeholder.com/100?text=Copa";
+                    break;
+				 case "Corrosa":
+                    imagen.src = "https://via.placeholder.com/100?text=Corrosa";
+                    break;
+                case "Costandopulo":
+                    imagen.src = "https://via.placeholder.com/100?text=Constandopulo";
+                    break;
+                case "Di Maggio Doormann":
+                    imagen.src = "https://via.placeholder.com/100?text=Di+Maggio+Doormann";
+                    break;
+                case "Di Placido":
+                    imagen.src = "https://via.placeholder.com/100?text=Di+Placido";
+                    break;
+                case "Diez":
+                    imagen.src = "https://via.placeholder.com/100?text=Diez";
+                    break;
+                case "Espindola":
+                    imagen.src = "https://via.placeholder.com/100?text=Espindola";
+                    break;
+				case "Costandopulo":
+                    imagen.src = "https://via.placeholder.com/100?text=Constandopulo";
+                    break;
+                case "Di Maggio Doormann":
+                    imagen.src = "https://via.placeholder.com/100?text=Di+Maggio+Doormann";
+                    break;
+                case "Di Placido":
+                    imagen.src = "https://via.placeholder.com/100?text=Di+Placido";
+                    break;
+                case "Diez":
+                    imagen.src = "https://via.placeholder.com/100?text=Diez";
+                    break;
+                case "Espindola":
+                    imagen.src = "https://via.placeholder.com/100?text=Espindola";
+                    break;
+                default:
+                    imagen.src = "https://via.placeholder.com/100";
+            }
+        }
+    </script>
+
+</body>
+</html>
